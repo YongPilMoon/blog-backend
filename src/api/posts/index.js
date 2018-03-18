@@ -13,9 +13,9 @@ const printInfo = (ctx) => {
 
 posts.get('/', postsCtrl.list);
 posts.post('/', postsCtrl.write);
-posts.get('/:id', postsCtrl.read);
-posts.delete('/:id', postsCtrl.remove);
-posts.put('/:id', postsCtrl.replace);
-posts.patch('/:id', postsCtrl.update);
+// posts.get('/:id', postsCtrl.read);
+// posts.delete('/:id', postsCtrl.remove);
+// posts.put('/:id', postsCtrl.replace);
+// posts.patch('/:id', postsCtrl.update);
 
 module.exports = posts;
