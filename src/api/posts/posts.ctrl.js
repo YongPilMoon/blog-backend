@@ -1,10 +1,6 @@
 const Post = require('../../models/post');
 const Joi = require('joi');
 
-const { ObjectId } = require('mongoose').Types;
-
-const postId = 1;
-
 exports.write = async (ctx) => {
   const schema = Joi.object().keys({
     title: Joi.string().required(),
@@ -67,73 +63,46 @@ exports.list = async (ctx) => {
   }
 };
 
-// exports.read = (ctx) => {
-//   const { id } = ctx.params;
-//
-//   const post = posts.find(p => p.id.toString() === id);
-//
-//   if(!post) {
-//     ctx.status = 404;
-//     ctx.body = {
-//       message: '포스트가 존재하지 않습니다.',
-//     };
-//   }
-//
-//   ctx.body = post;
-// };
-//
-// exports.remove = (ctx) => {
-//   const { id } = ctx.params;
-//
-//   const index = posts.findIndex(p => p.id.toString() === id);
-//   if (index === -1) {
-//     ctx.status = 404;
-//     ctx.body = {
-//       message: '포스트가 존재하지 않습ㄴ디ㅏ.',
-//     };
-//     return;
-//   }
-//
-//   posts.splice(index, 1);
-//   ctx.status = 204;
-// };
-//
-// exports.replace = (ctx) => {
-//   const { id } = ctx.params;
-//
-//   const index = posts.findIndex(p => p.id.toString() === id);
-//
-//   if (index === -1) {
-//     ctx.status = 404;
-//     ctx.body = {
-//       message: '포스트가 존재하지 않습니다.',
-//     };
-//     return;
-//   }
-//
-//   posts[index] = {
-//     id,
-//     ...ctx.request.body,
-//   };
-//   ctx.body = posts[index];
-// };
-//
-// exports.update = (ctx) => {
-//   const { id } = ctx.params;
-//
-//   const index = posts.findIndex(p => p.id.toString() === id);
-//
-//   if (index === -1) {
-//     ctx.status = 404;
-//     ctx.body = {
-//       message: '포스트가 존재하지 않습니다.',
-//     };
-//     return;
-//   }
-//
-//   posts[index] = {
-//     ...posts[index],
-//     ...ctx.request.body,
-//   };
-//   ctx.body = posts[index];
-// };
+exports.read = async (ctx) => {
+  const { id } = ctx.params;
+  try {
+    const post = await Post.findById(id).exec();
+
+    if(!post) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(e, 500);
+  }
+};
+
+exports.remove = async (ctx) => {
+  const { id } = ctx.params;
+
+  try {
+    await Post.findByIdAndRemove(id).exec();
+    ctx.status = 204;
+  } catch (e) {
+    ctx.throw(e, 500);
+  }
+};
+
+exports.update = async (ctx) => {
+  const { id } = ctx.params;
+
+  try {
+    const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+      new: true,
+    }).exec();
+
+    if(!post) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(e, 500);
+  }
+};
