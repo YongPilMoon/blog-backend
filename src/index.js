@@ -23,6 +23,7 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use((ctx, next) => {
   const allowedHosts = [
     'localhost:3000',
+    'myp-blog.s3-website.ap-northeast-2.amazonaws.com',
   ];
   const origin = ctx.header.origin;
   allowedHosts.every((el) => {
@@ -36,7 +37,7 @@ app.use((ctx, next) => {
   ctx.set('Access-Control-Allow-Credentials', true);
   ctx.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-timebase, Link');
   ctx.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PATCH, OPTIONS');
-  ctx.set('Access-Control-Expose-Headers', 'Link');
+  ctx.set('Access-Control-Expose-Headers', 'Link, Last-page');
   return next();
 });
 

@@ -32,17 +32,16 @@ exports.write = async (ctx) => {
 
 exports.list = async (ctx) => {
   const page = parseInt(ctx.query.page || 1, 10);
-
-  if(page < 1) {
-    ctx.status = 400;
-    return;
-  }
-
   const { tag } = ctx.query;
 
   const query = tag ? {
     tags: tag,
   } : {};
+
+  if(page < 1) {
+    ctx.status = 400;
+    return;
+  }
 
   try {
     const posts = await Post.find(query)
@@ -54,7 +53,7 @@ exports.list = async (ctx) => {
     const postCount = await Post.count(query).exec();
     const limitBodyLength = post => ({
       ...post,
-      body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+      body: post.body.length < 350 ? post.body : `${post.body.slice(0, 350)}...`,
     });
     ctx.body = posts.map(limitBodyLength);
     ctx.set('Last-page', Math.ceil(postCount / 10));
