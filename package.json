@@ -10,7 +10,8 @@
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0",
-    "mongoose": "^5.0.10"
+    "mongoose": "^5.0.10",
+    "shortid": "^2.2.8"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^16.1.0",

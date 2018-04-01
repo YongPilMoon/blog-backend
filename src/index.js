@@ -4,6 +4,12 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 
+const {
+  PROT: port = 4000,
+  MONGO_URI: mongoURI,
+  COOKIE_SIGN_KEY: signKey,
+} = process.env;
+
 const app = new Koa();
 const router = new Router();
 const api = require('./api');
@@ -12,7 +18,7 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(mongoURI, {
 }).then((response) => {
   console.log('Successfully connected to mongodb');
 }).catch((e) => {
@@ -35,23 +41,19 @@ app.use((ctx, next) => {
     return true;
   });
   ctx.set('Access-Control-Allow-Credentials', true);
-  ctx.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-timebase, Link');
+  ctx.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-timebase, Link, Token');
   ctx.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PATCH, OPTIONS');
-  ctx.set('Access-Control-Expose-Headers', 'Link, Last-page');
+  ctx.set('Access-Control-Expose-Headers', 'Link, Last-page, Token');
   return next();
 });
-
-const port = process.env.PORT || 4000;
-
-router.use('/api', api.routes());
 
 app.use(bodyParser());
 
 app.use(router.routes())
   .use(router.allowedMethods());
 
-app.listen(4000, () => {
+router.use('/api', api.routes());
+
+app.listen(port, () => {
   console.log('heurm server is listening to port 4000');
 });
-
-

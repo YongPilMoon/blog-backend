@@ -1,3 +1,8 @@
+const path = require('path');
+const fs = require('fs');
+
+const filePath = path.join(__dirname, '../../token.json');
+
 const Post = require('../../models/post');
 const Joi = require('joi');
 
@@ -104,4 +109,14 @@ exports.update = async (ctx) => {
   } catch (e) {
     ctx.throw(e, 500);
   }
+};
+
+exports.checkLogin = (ctx, next) => {
+  const { token: userToken } = ctx.request.header;
+  const { token } = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  if(userToken !== token) {
+    ctx.status = 401;
+    return null;
+  }
+  return next();
 };

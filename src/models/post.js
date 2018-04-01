@@ -12,4 +12,4 @@ const Post = new Schema({
   },
 });
 
-module.exports = mongoose.model('Post', Post)
+module.exports = mongoose.model('Post', Post);
