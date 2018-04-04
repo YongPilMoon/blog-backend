@@ -27,7 +27,6 @@ exports.login = (ctx) => {
 exports.check = (ctx) => {
   const { token: userToken } = ctx.request.header;
   const { token } = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  console.log(ctx.request.header);
   if(userToken === token) {
     ctx.body = {
       logged: true,

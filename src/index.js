@@ -25,7 +25,6 @@ mongoose.connect(mongoURI, {
   console.log(e);
 });
 
-
 app.use((ctx, next) => {
   const allowedHosts = [
     'localhost:3000',
@@ -48,7 +47,6 @@ app.use((ctx, next) => {
 });
 
 app.use(bodyParser());
-
 app.use(router.routes())
   .use(router.allowedMethods());
 
