@@ -28,7 +28,8 @@ mongoose.connect(mongoURI, {
 app.use((ctx, next) => {
   const allowedHosts = [
     'localhost:3000',
-    'myp-blog.s3-website.ap-northeast-2.amazonaws.com',
+    'jurtle.net',
+    'jurtle.net.s3-website.ap-northeast-2.amazonaws.com',
   ];
   const origin = ctx.header.origin;
   allowedHosts.every((el) => {
