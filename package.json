@@ -23,6 +23,7 @@
   },
   "scripts": {
     "start": "pm2 start src",
+    "stop": "pm2 stop src",
     "start:dev": "nodemon --watch src/ src/index.js"
   }
 }

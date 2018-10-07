@@ -6,8 +6,10 @@ const bodyParser = require('koa-bodyparser');
 
 const {
   PROT: port = 4000,
-  MONGO_URI: mongoURI,
+  MONGO_URI: mongoUri,
+  MONGO_URI_DEV: mongoUriDev,
   COOKIE_SIGN_KEY: signKey,
+  NODE_ENV,
 } = process.env;
 
 const app = new Koa();
@@ -17,8 +19,7 @@ const api = require('./api');
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-
-mongoose.connect(mongoURI, {
+mongoose.connect(NODE_ENV === 'development' ? mongoUriDev : mongoUri, {
 }).then((response) => {
   console.log('Successfully connected to mongodb');
 }).catch((e) => {
