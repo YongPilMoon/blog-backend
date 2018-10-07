@@ -6,6 +6,7 @@ const Post = new Schema({
   title: String,
   body: String,
   tags: [String],
+  mainImg: String,
   publishedDate: {
     type: Date,
     default: new Date(),

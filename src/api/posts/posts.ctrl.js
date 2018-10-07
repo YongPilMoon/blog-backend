@@ -11,6 +11,7 @@ exports.write = async (ctx) => {
     title: Joi.string().required(),
     body: Joi.string().required(),
     tags: Joi.array().items(Joi.string()).required(),
+    mainImg: Joi.string(),
   });
 
   const result = Joi.validate(ctx.request.body, schema);
@@ -21,10 +22,12 @@ exports.write = async (ctx) => {
     return;
   }
 
-  const { title, body, tags } = ctx.request.body;
+  const {
+    title, body, tags, mainImg,
+  } = ctx.request.body;
 
   const post = new Post({
-    title, body, tags,
+    title, body, tags, mainImg,
   });
 
   try {
