@@ -61,7 +61,7 @@ exports.list = async (ctx) => {
     const postCount = await Post.count(query).exec();
     const limitBodyLength = post => ({
       ...post,
-      body: post.body.length < 350 ? post.body : `${post.body.slice(0, 350)}...`,
+      body: post.body.length < 100 ? post.body : `${post.body.slice(0, 100)}...`,
     });
     ctx.body = posts.map(limitBodyLength);
     ctx.set('Last-page', Math.ceil(postCount / 10));
