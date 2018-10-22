@@ -11,6 +11,7 @@ exports.write = async (ctx) => {
     title: Joi.string().required(),
     body: Joi.string().required(),
     tags: Joi.array().items(Joi.string()).required(),
+    published: Joi.boolean().required(),
     mainImg: Joi.string(),
   });
 
@@ -23,11 +24,11 @@ exports.write = async (ctx) => {
   }
 
   const {
-    title, body, tags, mainImg,
+    title, body, tags, mainImg, published,
   } = ctx.request.body;
 
   const post = new Post({
-    title, body, tags, mainImg,
+    title, body, tags, mainImg, published,
   });
 
   try {
