@@ -44,7 +44,7 @@ exports.list = async (ctx) => {
   const { tag } = ctx.query;
   const { token: userToken } = ctx.request.header;
   const { token } = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-
+  const POST_COUNT_ONE_PAGE = 7;
   const query = {};
 
   if (tag) {
@@ -63,8 +63,8 @@ exports.list = async (ctx) => {
   try {
     const posts = await Post.find(query)
       .sort({ _id: -1 })
-      .limit(10)
-      .skip((page - 1) * 10)
+      .limit(POST_COUNT_ONE_PAGE)
+      .skip((page - 1) * POST_COUNT_ONE_PAGE)
       .lean()
       .exec();
     const postCount = await Post.count(query).exec();
@@ -73,8 +73,8 @@ exports.list = async (ctx) => {
       body: post.body.length < 100 ? post.body : `${post.body.slice(0, 100)}...`,
     });
     ctx.body = posts.map(limitBodyLength);
-    ctx.set('Last-page', Math.ceil(postCount / 10));
-    ctx.set('Is-last', page * 10 >= postCount);
+    ctx.set('Last-page', Math.ceil(postCount / POST_COUNT_ONE_PAGE));
+    ctx.set('Is-last', page * POST_COUNT_ONE_PAGE >= postCount);
   } catch (e) {
     ctx.throw(500, e);
   }
