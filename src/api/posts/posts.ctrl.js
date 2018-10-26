@@ -48,18 +48,20 @@ exports.list = async (ctx) => {
   const query = {};
 
   if (tag) {
-    query.tag = tag;
+    query.tags = tag;
   }
 
   if(userToken !== token) {
     query.published = true;
   }
 
+  console.log(query);
   if(page < 1) {
     ctx.status = 400;
     return;
   }
 
+  console.log(page)
   try {
     const posts = await Post.find(query)
       .sort({ _id: -1 })
@@ -68,6 +70,7 @@ exports.list = async (ctx) => {
       .lean()
       .exec();
     const postCount = await Post.count(query).exec();
+    console.log(posts);
     const limitBodyLength = post => ({
       ...post,
       body: post.body.length < 100 ? post.body : `${post.body.slice(0, 100)}...`,
