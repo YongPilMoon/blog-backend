@@ -42,10 +42,18 @@ exports.write = async (ctx) => {
 exports.list = async (ctx) => {
   const page = parseInt(ctx.query.page || 1, 10);
   const { tag } = ctx.query;
+  const { token: userToken } = ctx.request.header;
+  const { token } = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-  const query = tag ? {
-    tags: tag,
-  } : {};
+  const query = {};
+
+  if (tag) {
+    query.tag = tag;
+  }
+
+  if(userToken !== token) {
+    query.published = true;
+  }
 
   if(page < 1) {
     ctx.status = 400;
