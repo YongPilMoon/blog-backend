@@ -12,7 +12,7 @@ exports.write = async (ctx) => {
     body: Joi.string().required(),
     tags: Joi.array().items(Joi.string()).required(),
     published: Joi.boolean().required(),
-    mainImg: Joi.string(),
+    mainImg: Joi.string().allow(''),
   });
 
   const result = Joi.validate(ctx.request.body, schema);
@@ -22,6 +22,7 @@ exports.write = async (ctx) => {
     ctx.body = result.error;
     return;
   }
+
 
   const {
     title, body, tags, mainImg, published,
@@ -55,13 +56,11 @@ exports.list = async (ctx) => {
     query.published = true;
   }
 
-  console.log(query);
   if(page < 1) {
     ctx.status = 400;
     return;
   }
 
-  console.log(page)
   try {
     const posts = await Post.find(query)
       .sort({ _id: -1 })
@@ -70,7 +69,6 @@ exports.list = async (ctx) => {
       .lean()
       .exec();
     const postCount = await Post.count(query).exec();
-    console.log(posts);
     const limitBodyLength = post => ({
       ...post,
       body: post.body.length < 100 ? post.body : `${post.body.slice(0, 100)}...`,
